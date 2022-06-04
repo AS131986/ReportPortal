@@ -35,20 +35,4 @@ public class SendFormPage {
         var formInfo = DataHelper.FormInfo.getFormInfo();
         formPage.sendValidForm(formInfo);
     }
-
-    @Test
-    void shouldSendFormRePlanning() {
-        holdBrowserOpen = true;
-        open("http://localhost:9999/");
-        var formPage = new FormPage();
-        var formInfo = DataHelper.FormInfo.getFormInfo();
-        formPage.sendValidForm(formInfo);
-        $x("//input[@placeholder='Дата встречи']").doubleClick().sendKeys(Keys.BACK_SPACE);
-        $x("//input[@placeholder='Дата встречи']").val(DataHelper.generateDate2(9));
-        $(withText("Запланировать")).click();
-        $x("//*[contains(text(),'Необходимо подтверждение')]").should(Condition.appear, Duration.ofSeconds(15));
-        $x("//*[contains(text(),'У вас уже запланирована встреча на другую дату. Перепланировать?')]").should(Condition.appear);
-        $$x("//*[@class='button__content']").filter(Condition.visible).last().click();
-        $(".notification__content").shouldHave(Condition.text("Встреча успешно запланирована на " + DataHelper.generateDate2(9)), Duration.ofSeconds(15));
-    }
 }
